@@ -1,14 +1,17 @@
 const expect = require("expect");
 const supertest = require("supertest");
+const { ObjectID } = require("mongodb");
 
 const { app } = require("../server");
 const { Todo } = require("../models/todo");
 
 const TODOS = [
   {
+    _id: new ObjectID(),
     text: "1st todo"
   },
   {
+    _id: new ObjectID(),
     text: "2nd todo"
   }
 ];
@@ -71,5 +74,15 @@ describe("GET /todos", () => {
       .expect(200)
       .expect(res => expect(res.body.todos.length).toBe(TODOS.length))
       .end(done);
+  });
+
+  describe("GET /todos/:id", () => {
+    it("should get specific todo", done => {
+      supertest(app)
+        .get(`/todos/${TODOS[0]._id.toHexString()}`)
+        .expect(200)
+        .expect(res => expect(res.body.todo.text).toBe(TODOS[0].text))
+        .end(done);
+    });
   });
 });
