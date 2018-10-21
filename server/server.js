@@ -3,7 +3,7 @@ const bodyParser = require("body-parser");
 const { ObjectID } = require("mongodb");
 const _ = require("lodash");
 
-require("./config/config");
+const { env, port } = require("./config/config");
 const { mongoose } = require("./db/mongoose");
 const { Todo } = require("./models/todo");
 const { User } = require("./models/user");
@@ -85,10 +85,8 @@ app.patch("/todos/:id", async (req, res) => {
     return res.status(400).send(e);
   }
 });
-app.listen(process.env.PORT, () =>
-  console.log(
-    `Started under ${process.env.NODE_ENV} mode on port ${process.env.PORT}`
-  )
+app.listen(port, () =>
+  console.log(`Started under ${env} mode on port ${port}`)
 );
 
 module.exports = { app };
