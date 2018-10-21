@@ -40,7 +40,22 @@ app.get("/todos/:id", async (req, res) => {
     }
     res.send({ todo });
   } catch (e) {
+    return res.status(400).send(e);
+  }
+});
+app.delete("/todos/:id", async (req, res) => {
+  const id = req.params.id;
+  if (!ObjectID.isValid(id)) {
     return res.status(400).send();
+  }
+  try {
+    const todo = await Todo.findByIdAndRemove(id);
+    if (!todo) {
+      return res.status(404).send();
+    }
+    res.send({ todo });
+  } catch (e) {
+    res.status(400).send(e);
   }
 });
 app.listen(PORT, () => console.log(`Started on port ${PORT}`));
