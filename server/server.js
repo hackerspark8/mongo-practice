@@ -3,12 +3,12 @@ const bodyParser = require("body-parser");
 const { ObjectID } = require("mongodb");
 const _ = require("lodash");
 
+require("./config/config");
 const { mongoose } = require("./db/mongoose");
 const { Todo } = require("./models/todo");
 const { User } = require("./models/user");
 
 const app = express();
-const PORT = process.env.PORT || 3000;
 app.use(bodyParser.json());
 app.post("/todos", async (req, res) => {
   let todo = new Todo({
@@ -85,6 +85,10 @@ app.patch("/todos/:id", async (req, res) => {
     return res.status(400).send(e);
   }
 });
-app.listen(PORT, () => console.log(`Started on port ${PORT}`));
+app.listen(process.env.PORT, () =>
+  console.log(
+    `Started under ${process.env.NODE_ENV} mode on port ${process.env.PORT}`
+  )
+);
 
 module.exports = { app };
